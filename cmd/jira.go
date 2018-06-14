@@ -24,19 +24,31 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // versionCmd represents the version command
-var jiraCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Display current version",
-	Long:  `version Display the current version of cfm`,
+var versionCmd = &cobra.Command{
+	Use:    "jira",
+	Short:  "Display current version",
+	Long:   `version Display the current version of cfm`,
+	PreRun: jiraPreRun,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("CFM Version:")
-		fmt.Println("v1.0.0")
+		p := parseTemplate(viper.GetString("template"))
+		fmt.Println(p)
 	},
 }
 
+func jiraPreRun(cmd *cobra.Command, args []string) {
+	viper.AddConfigPath("./")
+	viper.SetConfigType("yaml")
+	viper.SetConfigName("jira")
+	err := viper.ReadInConfig()
+	checkErr(err)
+
+	promptList()
+}
+
 func init() {
-	rootCmd.AddCommand(jiraCmd)
+	rootCmd.AddCommand(versionCmd)
 }
