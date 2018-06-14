@@ -21,7 +21,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -29,7 +28,17 @@ import (
 	"github.com/spf13/viper"
 )
 
+type option struct {
+	Value string
+	Desc  string
+}
+type keyValue struct {
+	Key   string
+	Value string
+}
+
 var cfgFile string
+var variables []keyValue
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -41,14 +50,17 @@ Generate a formated message for your repo using common notations for:
 	- Fixes
 	- Refactoring
 	- Tests`,
-	Run: func(cmd *cobra.Command, args []string) {},
+	PreRun: func(cmd *cobra.Command, args []string) { promptList() },
+	Run: func(cmd *cobra.Command, args []string) {
+		p := parseTemplate(viper.GetString("template"))
+		commit(p)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
 }
@@ -58,33 +70,47 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cfm.yaml)")
 }
 
+func loadLocalConfigFile(name string) error {
+	viper.AddConfigPath("./")
+	viper.SetConfigType("yaml")
+	viper.SetConfigName(name)
+	return viper.ReadInConfig()
+}
+
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	projectDir, _ := os.Getwd()
+	err := loadLocalConfigFile("default")
+	checkErr(err)
+
+	projectDir, err := os.Getwd()
+	checkErr(err)
 	projectConfigFile := projectDir + "/.cfm.yaml"
+
 	if _, err := os.Stat(projectConfigFile); err == nil {
 		cfgFile = projectConfigFile
 	}
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
 		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		checkErr(err)
 
 		// Search config in home directory with name ".cfm" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".cfm")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	viper.AutomaticEnv()
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		defaultFlow := viper.GetString("default")
+		if defaultFlow != "" {
+			err := loadLocalConfigFile(defaultFlow)
+			checkErr(err)
+		}
 	}
 }
