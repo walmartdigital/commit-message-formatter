@@ -1,5 +1,5 @@
 {
-  "name": "cmf",
+  "name": "go-cmf",
   "version": "1.0.0",
   "description": "CMF is an utility to standarize commit messages on porjects",
   "scripts": {
