@@ -1,14 +1,16 @@
 {
-  "name": "cfm",
+  "name": "cmf",
   "version": "1.0.0",
-  "description": "---",
-  "main": "index.js",
+  "description": "CMF is an utility to standarize commit messages on porjects",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "go-npm install",
+    "preuninstall": "go-npm uninstall"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "go-npm": "^0.1.9"
+  "author": "Rodrigo Navarro",
+  "license": "MIT",
+  "goBinary": {
+    "name": "cmf",
+    "path": "./bin",
+    "url": "https://github.com/WalmartDigital/commit-message-formatter/releases/download/v{{version}}/cmf_{{version}}_{{platform}}_{{arch}}.tar.gz"
   }
 }
