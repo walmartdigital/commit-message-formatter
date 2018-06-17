@@ -42,14 +42,16 @@ var variables []keyValue
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cfm",
+	Use:   "cmf",
 	Short: "Generate commit message for your repo",
-	Long: `CFM (Commit Format Message):
+	Long: `CMF (Commit Message Formatter):
 Generate a formated message for your repo using common notations for:
 	- Features
 	- Fixes
 	- Refactoring
-	- Tests`,
+	- Updates
+	- Tests
+	- Docs`,
 	PreRun: func(cmd *cobra.Command, args []string) { promptList() },
 	Run: func(cmd *cobra.Command, args []string) {
 		p := parseTemplate(viper.GetString("template"))
@@ -67,7 +69,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cfm.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmf.yaml)")
 }
 
 func loadLocalConfigFile(name string) error {
@@ -84,7 +86,7 @@ func initConfig() {
 
 	projectDir, err := os.Getwd()
 	checkErr(err)
-	projectConfigFile := projectDir + "/.cfm.yaml"
+	projectConfigFile := projectDir + "/.cmf.yaml"
 
 	if _, err := os.Stat(projectConfigFile); err == nil {
 		cfgFile = projectConfigFile
@@ -100,7 +102,7 @@ func initConfig() {
 
 		// Search config in home directory with name ".cfm" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".cfm")
+		viper.SetConfigName(".cmf")
 	}
 
 	viper.AutomaticEnv()

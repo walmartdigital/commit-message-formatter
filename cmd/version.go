@@ -30,9 +30,9 @@ import (
 var jiraCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Display current version",
-	Long:  `version Display the current version of cfm`,
+	Long:  `version Display the current version of cmf`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("CFM Version:")
+		fmt.Println("CMF Version:")
 		fmt.Println("v1.0.0")
 	},
 }
