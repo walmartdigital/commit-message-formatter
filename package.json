@@ -1,6 +1,6 @@
 {
   "name": "go-cmf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CMF is an utility to standarize commit messages on porjects",
   "scripts": {
     "postinstall": "go-npm install",
@@ -12,5 +12,8 @@
     "name": "cmf",
     "path": "./bin",
     "url": "https://github.com/WalmartDigital/commit-message-formatter/releases/download/v{{version}}/cmf_{{version}}_{{platform}}_{{arch}}.tar.gz"
+  },
+  "dependencies": {
+    "go-npm": "^0.1.9"
   }
 }
