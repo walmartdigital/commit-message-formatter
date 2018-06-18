@@ -1,0 +1,10 @@
+# Build customization
+project_name: cmf
+builds:
+  - binary: cmf
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
