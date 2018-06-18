@@ -8,3 +8,7 @@ builds:
       - linux
     goarch:
       - amd64
+archive:
+  files:
+    - default.yaml
+    - jira.yaml
