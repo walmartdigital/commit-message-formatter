@@ -11,7 +11,7 @@
   "goBinary": {
     "name": "cmf",
     "path": "./bin",
-    "url": "https://github.com/WalmartDigital/commit-message-formatter/releases/download/v{{version}}/commit-message-formatter_v{{version}}_{{platform}}_{{arch}}.tar.gz"
+    "url": "https://github.com/WalmartDigital/commit-message-formatter/releases/download/v{{version}}/commit-message-formatter_{{version}}_{{platform}}_{{arch}}.tar.gz"
   },
   "dependencies": {
     "go-npm": "^0.1.9"
