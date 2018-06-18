@@ -84,7 +84,7 @@ func initConfig() {
 	err := loadLocalConfigFile("default")
 	checkErr(err)
 
-	projectDir, err := os.Getwd()
+	projectDir, err := os.Executable()
 	checkErr(err)
 	projectConfigFile := projectDir + "/.cmf.yaml"
 
