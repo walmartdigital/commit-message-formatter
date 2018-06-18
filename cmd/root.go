@@ -21,8 +21,10 @@
 package cmd
 
 import (
+	"bytes"
 	"os"
 
+	"github.com/gobuffalo/packr"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -73,10 +75,10 @@ func init() {
 }
 
 func loadLocalConfigFile(name string) error {
-	viper.AddConfigPath("./")
+	box := packr.NewBox("../configs")
+	s := box.String(name + ".yaml")
 	viper.SetConfigType("yaml")
-	viper.SetConfigName(name)
-	return viper.ReadInConfig()
+	return viper.ReadConfig(bytes.NewBuffer([]byte(s)))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -84,7 +86,7 @@ func initConfig() {
 	err := loadLocalConfigFile("default")
 	checkErr(err)
 
-	projectDir, err := os.Executable()
+	projectDir, err := os.Getwd()
 	checkErr(err)
 	projectConfigFile := projectDir + "/.cmf.yaml"
 

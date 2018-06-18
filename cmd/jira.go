@@ -21,8 +21,10 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 
+	"github.com/gobuffalo/packr"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -40,10 +42,10 @@ var versionCmd = &cobra.Command{
 }
 
 func jiraPreRun(cmd *cobra.Command, args []string) {
-	viper.AddConfigPath("./")
+	box := packr.NewBox("../configs")
+	s := box.String("jira.yaml")
 	viper.SetConfigType("yaml")
-	viper.SetConfigName("jira")
-	err := viper.ReadInConfig()
+	err := viper.ReadConfig(bytes.NewBuffer([]byte(s)))
 	checkErr(err)
 
 	promptList()
