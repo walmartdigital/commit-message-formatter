@@ -22,7 +22,6 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
 
 	"github.com/gobuffalo/packr"
 	"github.com/spf13/cobra"
@@ -37,7 +36,7 @@ var versionCmd = &cobra.Command{
 	PreRun: jiraPreRun,
 	Run: func(cmd *cobra.Command, args []string) {
 		p := parseTemplate(viper.GetString("template"))
-		fmt.Println(p)
+		commit(p)
 	},
 }
 
