@@ -33,6 +33,12 @@
   version = "v1.4.7"
 
 [[projects]]
+  name = "github.com/gobuffalo/packr"
+  packages = ["."]
+  revision = "bd47f2894846e32edcf9aa37290fef76c327883f"
+  version = "v1.11.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [
@@ -133,6 +139,12 @@
   packages = ["."]
   revision = "c01d1270ff3e442a8a57cddc1c92dc1138598194"
   version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
 
 [[projects]]
   name = "github.com/sergi/go-diff"
@@ -261,8 +273,8 @@
     "osfs",
     "util"
   ]
-  revision = "df053870ae7070b0350624ba5a22161ba3796cc0"
-  version = "v4.1.1"
+  revision = "83cf655d40b15b427014d7875d10850f96edba14"
+  version = "v4.2.0"
 
 [[projects]]
   name = "gopkg.in/src-d/go-git.v4"
@@ -326,6 +338,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0228792ae41cef539b9dc7e0b83951a21793345f63ca2261299b42332475b8f7"
+  inputs-digest = "888be12102cbda20bb7b78c4a56c04e68a3b7446cab91d72f3aabcbc9f2f5d5a"
   solver-name = "gps-cdcl"
   solver-version = 1

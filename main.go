@@ -20,7 +20,7 @@
 
 package main
 
-import "walmart.com/cfm/cmd"
+import "github.com/walmartdigital/commit-message-formatter/cmd"
 
 func main() {
 	cmd.Execute()

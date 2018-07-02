@@ -32,8 +32,7 @@ import (
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/viper"
 	gitconfig "github.com/tcnksm/go-gitconfig"
-	// "github.com/tcnksm/go-gitconfig"
-	"gopkg.in/src-d/go-git.v4"
+	git "gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
