@@ -21,8 +21,10 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
+	"github.com/gobuffalo/packr"
 	"github.com/spf13/cobra"
 )
 
@@ -32,8 +34,14 @@ var jiraCmd = &cobra.Command{
 	Short: "Display current version",
 	Long:  `version Display the current version of cmf`,
 	Run: func(cmd *cobra.Command, args []string) {
+		box := packr.NewBox("../")
+		raw := box.Bytes("package.json")
+		var p struct {
+			Version string `json:"version"`
+		}
+		json.Unmarshal(raw, &p)
 		fmt.Println("CMF Version:")
-		fmt.Println("v1.0.0")
+		fmt.Println("v" + p.Version)
 	},
 }
 
