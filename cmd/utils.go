@@ -24,7 +24,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 
@@ -119,9 +118,14 @@ func commit(message string) (err error) {
 	s, err := w.Status()
 	checkErr(err)
 
-	m, _ := regexp.MatchString("A .*", s.String())
+	hasStagingFiles := false
+	for _, status := range s {
+		if status.Staging == 77 {
+			hasStagingFiles = true
+		}
+	}
 
-	if m {
+	if hasStagingFiles {
 		username, err := gitconfig.Username()
 		email, err := gitconfig.Email()
 
