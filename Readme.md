@@ -122,12 +122,14 @@ TEMPLATE: "{{CHANGE}}({{MODULE}}): {{MESSAGE}}"
 
 ---
 
-Contributions
+## Contributions
+
 Use GitHub issues for requests.
 
 I actively welcome pull requests; learn how to contribute.
 
 ---
 
-License
+## License
+
 CMF is available under the MIT License.
