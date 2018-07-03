@@ -1,6 +1,6 @@
 {
   "name": "go-cmf",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "CMF is an utility to standarize commit messages on porjects",
   "scripts": {
     "postinstall": "go-npm install",
