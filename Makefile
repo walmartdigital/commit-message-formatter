@@ -1,4 +1,5 @@
 build:
+	cp package.json package/package.json
 	packr -v -z
 
 publish:
