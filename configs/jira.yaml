@@ -1,6 +1,6 @@
 PROMPT:
   - KEY: "JIRA-TASK"
-    LABEL: "Jira task ID:"
+    LABEL: "Jira task ID"
   - KEY: "CHANGE"
     LABEL: "Select the type of change:"
     OPTIONS:
@@ -17,5 +17,5 @@ PROMPT:
       - VALUE: "test"
         DESC: "Add, change or update test code"
   - KEY: "MESSAGE"
-    LABEL: "Commit message:"
+    LABEL: "Commit message"
 TEMPLATE: "{{JIRA-TASK}} ({{CHANGE}}): {{MESSAGE}}"
