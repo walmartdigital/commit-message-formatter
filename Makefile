@@ -3,6 +3,6 @@ build:
 	packr -v -z
 
 publish:
-	rm -R ./dist
+	if [ -d ./dist ]; then rm -Rf ./dist; fi
 	goreleaser
 	npm publish
