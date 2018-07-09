@@ -120,7 +120,7 @@ func commit(message string) (err error) {
 
 	hasStagingFiles := false
 	for _, status := range s {
-		if status.Staging != 32 && status.Worktree == 32 {
+		if status.Staging != 32 && status.Staging != 63 {
 			hasStagingFiles = true
 		}
 	}
