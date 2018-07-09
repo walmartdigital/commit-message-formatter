@@ -34,13 +34,14 @@ var jiraCmd = &cobra.Command{
 	Short: "Display current version",
 	Long:  `version Display the current version of cmf`,
 	Run: func(cmd *cobra.Command, args []string) {
-		box := packr.NewBox("../")
+		box := packr.NewBox("../package")
 		raw := box.Bytes("package.json")
 		var p struct {
-			Version string `json:"version"`
+			Version     string `json:"version"`
+			Description string `json:"description"`
 		}
 		json.Unmarshal(raw, &p)
-		fmt.Println("CMF Version:")
+		fmt.Println(p.Description)
 		fmt.Println("v" + p.Version)
 	},
 }

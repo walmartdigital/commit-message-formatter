@@ -10,7 +10,7 @@
   "license": "MIT",
   "goBinary": {
     "name": "cmf",
-    "path": "./bin",
+    "path": "../bin",
     "url": "https://github.com/WalmartDigital/commit-message-formatter/releases/download/v{{version}}/cmf_{{version}}_{{platform}}_{{arch}}.tar.gz"
   },
   "dependencies": {
