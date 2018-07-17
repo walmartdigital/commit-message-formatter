@@ -130,7 +130,7 @@ func commit(message string) (err error) {
 	if hasStagingFiles {
 		username, err := gitconfig.Username()
 		email, err := gitconfig.Email()
-		fmt.Println(Gray("Preparing commit..."))
+		fmt.Println(Gray("Changes added, Preparing commit..."))
 
 		_, err = w.Commit(message, &git.CommitOptions{
 			Author: &object.Signature{
@@ -140,10 +140,11 @@ func commit(message string) (err error) {
 			},
 		})
 		checkErr(err)
-		fmt.Println(Green("Done!"))
-		fmt.Println(Magenta("Happy coding!"))
+		lastCommit := "Last commit: " + message
+		fmt.Println(Gray(lastCommit))
+		fmt.Println(Green("Done"))
 	} else {
-		checkErr(errors.New("no changes added to commit"))
+		checkErr(errors.New("No changes added to commit"))
 	}
 
 	return
