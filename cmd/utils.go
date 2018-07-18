@@ -28,11 +28,12 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	. "github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/viper"
-	gitconfig "github.com/tcnksm/go-gitconfig"
 	git "gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
+	gitconfig "walmart.com/cfm/src/github.com/tcnksm/go-gitconfig"
 )
 
 func checkErr(err error) {
@@ -114,6 +115,7 @@ func commit(message string) (err error) {
 
 	w, err := r.Worktree()
 	checkErr(err)
+	fmt.Println(Gray("Checking working tree..."))
 
 	s, err := w.Status()
 	checkErr(err)
@@ -128,6 +130,7 @@ func commit(message string) (err error) {
 	if hasStagingFiles {
 		username, err := gitconfig.Username()
 		email, err := gitconfig.Email()
+		fmt.Println(Gray("Changes added, Preparing commit..."))
 
 		_, err = w.Commit(message, &git.CommitOptions{
 			Author: &object.Signature{
@@ -137,8 +140,11 @@ func commit(message string) (err error) {
 			},
 		})
 		checkErr(err)
+		lastCommit := "Last commit: " + message
+		fmt.Println(Gray(lastCommit))
+		fmt.Println(Green("Done"))
 	} else {
-		checkErr(errors.New("no changes added to commit"))
+		checkErr(errors.New("No changes added to commit"))
 	}
 
 	return

@@ -84,6 +84,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/logrusorgru/aurora"
+  packages = ["."]
+  revision = "d694e6f975a9109e2b063829d563a7c153c4b53c"
+
+[[projects]]
+  branch = "master"
   name = "github.com/lunixbochs/vtclean"
   packages = ["."]
   revision = "d14193dfc626125c831501c1c42340b4248e1f5a"
@@ -201,12 +207,6 @@
   ]
   revision = "f187355171c936ac84a82793659ebb4936bc1c23"
   version = "v1.3.0"
-
-[[projects]]
-  name = "github.com/tcnksm/go-gitconfig"
-  packages = ["."]
-  revision = "d154598bacbf4501c095a309753c5d4af66caa81"
-  version = "v0.1.2"
 
 [[projects]]
   branch = "master"
@@ -338,6 +338,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "888be12102cbda20bb7b78c4a56c04e68a3b7446cab91d72f3aabcbc9f2f5d5a"
+  inputs-digest = "347b073325ba74c56a5518314a41ee1885ef1b9a897afbe75c18f9d3874f7d3d"
   solver-name = "gps-cdcl"
   solver-version = 1
