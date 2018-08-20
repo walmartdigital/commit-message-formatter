@@ -36,6 +36,8 @@ import (
 	gitconfig "walmart.com/cfm/src/github.com/tcnksm/go-gitconfig"
 )
 
+var w *git.Worktree
+
 func checkErr(err error) {
 	if err != nil {
 		color.Set(color.FgMagenta)
@@ -106,17 +108,6 @@ func promptList() {
 }
 
 func commit(message string) (err error) {
-	directory, err := os.Getwd()
-	checkErr(err)
-
-	// Opens an already existent repository.
-	r, err := git.PlainOpen(directory)
-	checkErr(err)
-
-	w, err := r.Worktree()
-	checkErr(err)
-	fmt.Println(Gray("Checking working tree..."))
-
 	s, err := w.Status()
 	checkErr(err)
 
@@ -148,4 +139,19 @@ func commit(message string) (err error) {
 	}
 
 	return
+}
+
+func init() {
+	directory, err := os.Getwd()
+	checkErr(err)
+
+	// Opens an already existent repository.
+	r, err := git.PlainOpen(directory)
+	checkErr(err)
+
+	go (func() {
+		w, err = r.Worktree()
+		checkErr(err)
+		_ = w
+	})()
 }
