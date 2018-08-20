@@ -37,6 +37,7 @@ import (
 )
 
 var w *git.Worktree
+var hasStagingFiles bool
 
 func checkErr(err error) {
 	if err != nil {
@@ -108,35 +109,21 @@ func promptList() {
 }
 
 func commit(message string) (err error) {
-	s, err := w.Status()
+	username, err := gitconfig.Username()
+	email, err := gitconfig.Email()
+	fmt.Println(Gray("Changes added, Preparing commit..."))
+
+	_, err = w.Commit(message, &git.CommitOptions{
+		Author: &object.Signature{
+			Name:  username,
+			Email: email,
+			When:  time.Now(),
+		},
+	})
 	checkErr(err)
-
-	hasStagingFiles := false
-	for _, status := range s {
-		if status.Staging != 32 && status.Staging != 63 {
-			hasStagingFiles = true
-		}
-	}
-
-	if hasStagingFiles {
-		username, err := gitconfig.Username()
-		email, err := gitconfig.Email()
-		fmt.Println(Gray("Changes added, Preparing commit..."))
-
-		_, err = w.Commit(message, &git.CommitOptions{
-			Author: &object.Signature{
-				Name:  username,
-				Email: email,
-				When:  time.Now(),
-			},
-		})
-		checkErr(err)
-		lastCommit := "Last commit: " + message
-		fmt.Println(Gray(lastCommit))
-		fmt.Println(Green("Done"))
-	} else {
-		checkErr(errors.New("No changes added to commit"))
-	}
+	lastCommit := "Last commit: " + message
+	fmt.Println(Gray(lastCommit))
+	fmt.Println(Green("Done"))
 
 	return
 }
@@ -152,6 +139,19 @@ func init() {
 	go (func() {
 		w, err = r.Worktree()
 		checkErr(err)
-		_ = w
+
+		s, err := w.Status()
+		checkErr(err)
+
+		hasStagingFiles = false
+		for _, status := range s {
+			if status.Staging != 32 && status.Staging != 63 {
+				hasStagingFiles = true
+			}
+		}
+
+		if !hasStagingFiles {
+			checkErr(errors.New("No changes added to commit"))
+		}
 	})()
 }
