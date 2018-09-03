@@ -48,12 +48,13 @@ var rootCmd = &cobra.Command{
 	Short: "Generate commit message for your repo",
 	Long: `CMF (Commit Message Formatter):
 Generate a formated message for your repo using common notations for:
+	- Build & CI
+	- Documentation
 	- Features
-	- Fixes
-	- Refactoring
-	- Updates
-	- Tests
-	- Docs`,
+	- Bug fixes
+	- Refactor
+	- Code style
+	- Test`,
 	PreRun: func(cmd *cobra.Command, args []string) { promptList() },
 	Run: func(cmd *cobra.Command, args []string) {
 		p := parseTemplate(viper.GetString("template"))
