@@ -24,27 +24,21 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
-	"time"
 
 	"github.com/fatih/color"
 	. "github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/viper"
-	git "gopkg.in/src-d/go-git.v4"
-	"gopkg.in/src-d/go-git.v4/plumbing/object"
-	gitconfig "walmart.com/cfm/src/github.com/tcnksm/go-gitconfig"
 )
-
-var w *git.Worktree
-var hasStagingFiles bool
 
 func checkErr(err error) {
 	if err != nil {
 		color.Set(color.FgMagenta)
 		defer color.Unset()
 		fmt.Print(err)
-		os.Exit(1)
+		os.Exit(0)
 	}
 }
 
@@ -109,19 +103,10 @@ func promptList() {
 }
 
 func commit(message string) (err error) {
-	username, err := gitconfig.Username()
-	email, err := gitconfig.Email()
-	fmt.Println(Gray("Changes added, Preparing commit..."))
-
-	_, err = w.Commit(message, &git.CommitOptions{
-		Author: &object.Signature{
-			Name:  username,
-			Email: email,
-			When:  time.Now(),
-		},
-	})
-	checkErr(err)
+	cmdGit := exec.Command("git", "commit", "-m", message)
 	lastCommit := "Last commit: " + message
+	_, err = cmdGit.Output()
+	checkErr(err)
 	fmt.Println(Gray(lastCommit))
 	fmt.Println(Green("Done"))
 
@@ -129,29 +114,9 @@ func commit(message string) (err error) {
 }
 
 func init() {
-	directory, err := os.Getwd()
-	checkErr(err)
-
-	// Opens an already existent repository.
-	r, err := git.PlainOpen(directory)
-	checkErr(err)
-
-	go (func() {
-		w, err = r.Worktree()
-		checkErr(err)
-
-		s, err := w.Status()
-		checkErr(err)
-
-		hasStagingFiles = false
-		for _, status := range s {
-			if status.Staging != 32 && status.Staging != 63 {
-				hasStagingFiles = true
-			}
-		}
-
-		if !hasStagingFiles {
-			checkErr(errors.New("No changes added to commit"))
-		}
-	})()
+	cmdGit := exec.Command("git", "diff", "--cached", "--exit-code")
+	_, err := cmdGit.Output()
+	if err == nil {
+		checkErr(errors.New("No changes added to commit"))
+	}
 }
