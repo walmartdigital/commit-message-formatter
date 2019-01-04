@@ -105,8 +105,9 @@ func promptList() {
 func commit(message string) (err error) {
 	cmdGit := exec.Command("git", "commit", "-m", message)
 	lastCommit := "Last commit: " + message
-	_, err = cmdGit.Output()
+	output, err := cmdGit.Output()
 	checkErr(err)
+	fmt.Println(string(output))
 	fmt.Println(Gray(lastCommit))
 	fmt.Println(Green("Done"))
 
