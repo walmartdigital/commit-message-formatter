@@ -20,8 +20,13 @@
 
 package main
 
-import "github.com/walmartdigital/commit-message-formatter/cmd"
+import (
+	"cmd"
+	"os"
+)
 
 func main() {
-	cmd.Execute()
+	if err := cmd.Root.Execute(); err != nil {
+		os.Exit(1)
+	}
 }
