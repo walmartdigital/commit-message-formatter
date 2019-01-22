@@ -1,8 +1,9 @@
 PROMPT:
   - KEY: "JIRA-TASK"
-    LABEL: "Jira task ID"
+    LABEL: "Jira task ID (no-story)"
+    DEFAULT_VALUE: "no-story"
   - KEY: "CHANGE"
-    LABEL: "Select the type of change:"
+    LABEL: "Type of change:"
     OPTIONS:
       - VALUE: "feature"
         DESC: "Add new feature"

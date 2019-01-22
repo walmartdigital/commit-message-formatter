@@ -20,4 +20,4 @@ PROMPT:
     LABEL: "Affected module"
   - KEY: "MESSAGE"
     LABEL: "Commit message"
-TEMPLATE: "{{CHANGE}}({{MODULE}}): {{MESSAGE}}"
+TEMPLATE: "Create your own template or options {{CHANGE}}({{MODULE}}): {{MESSAGE}}"
