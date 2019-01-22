@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"boilerplate"
-	"fmt"
+	"template"
 
+	"github.com/commit-message-formatter/pkg/git"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,20 @@ var Root = &cobra.Command{
 	Long:   "Generate custom commit message for your repo and standarize your commits log",
 	PreRun: func(cmd *cobra.Command, args []string) {},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("RUN...")
+		go git.CheckTree()
+		message := template.Run()
+		git.Commit(message)
+	},
+}
+
+var amend = &cobra.Command{
+	Use:    "amend",
+	Short:  "Amend commit message",
+	Long:   "Amend last commit message",
+	PreRun: func(cmd *cobra.Command, args []string) {},
+	Run: func(cmd *cobra.Command, args []string) {
+		message := template.Run()
+		git.Amend(message)
 	},
 }
 
@@ -30,4 +44,5 @@ var boilerplateCMD = &cobra.Command{
 
 func init() {
 	Root.AddCommand(boilerplateCMD)
+	Root.AddCommand(amend)
 }
