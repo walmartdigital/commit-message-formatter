@@ -1,6 +1,7 @@
 package git
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -26,14 +27,13 @@ func CheckTree() {
 }
 
 func commit(cmdGit *exec.Cmd, message ...interface{}) {
-	output, err := cmdGit.Output()
-	checkErr(err)
-
 	fmt.Println("")
 	fmt.Println("Committing: ", color.Blue(message))
 	fmt.Println(color.Gray("-------------------------------"))
 	fmt.Println("")
-	fmt.Println(color.Gray(string(output)))
+	cmdGit.Stdout = os.Stdout
+	cmdGit.Run()
+	fmt.Println("")
 	fmt.Println(color.Gray("-------------------------------"))
 	fmt.Println(color.Green("Done \U0001F604"))
 
@@ -42,7 +42,8 @@ func commit(cmdGit *exec.Cmd, message ...interface{}) {
 
 // Commit execute commit
 func Commit(message string) (err error) {
-	cmdGit := exec.Command("git", "commit", "-m", message)
+	ctx := context.Background()
+	cmdGit := exec.CommandContext(ctx, "git", "commit", "-m", message)
 	commit(cmdGit, "Committing: ", color.Blue(message))
 
 	return
@@ -50,7 +51,8 @@ func Commit(message string) (err error) {
 
 // Amend execute commit amend
 func Amend(message string) (err error) {
-	cmdGit := exec.Command("git", "commit", "--amend", "-m", message)
+	ctx := context.Background()
+	cmdGit := exec.CommandContext(ctx, "git", "commit", "--amend", "-m", message)
 	commit(cmdGit, "Amending: ", color.Blue(message))
 
 	return
