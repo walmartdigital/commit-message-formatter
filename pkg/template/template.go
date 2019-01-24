@@ -22,7 +22,7 @@ type keyValue struct {
 
 func checkErr(err error) {
 	if err != nil {
-		fmt.Print(color.Red(err))
+		fmt.Print(color.Red("An error occurred, maybe 'cmf init' could fix it"))
 		os.Exit(0)
 	}
 }
