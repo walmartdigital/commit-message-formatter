@@ -28,7 +28,7 @@ func CheckTree() {
 
 func commit(cmdGit *exec.Cmd, message ...interface{}) {
 	fmt.Println("")
-	fmt.Println("Committing: ", color.Blue(message))
+	fmt.Println(message...)
 	fmt.Println(color.Gray("-------------------------------"))
 	fmt.Println("")
 	cmdGit.Stdout = os.Stdout
