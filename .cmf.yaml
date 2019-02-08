@@ -3,7 +3,7 @@ PROMPT:
     LABEL: "Jira task ID"
     DEFAULT_VALUE: "{{BRANCH_NAME}}"
   - KEY: "CHANGE"
-    LABEL: "Type of change:"
+    LABEL: "Type of change"
     OPTIONS:
       - VALUE: "feature"
         DESC: "Add new feature"

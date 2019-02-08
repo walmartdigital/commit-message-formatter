@@ -1,6 +1,6 @@
 PROMPT:
   - KEY: "CHANGE"
-    LABEL: "Type of change:"
+    LABEL: "Type of change"
     OPTIONS:
       - VALUE: "feature"
         DESC: "Add new feature"
