@@ -6,6 +6,8 @@ import (
 	"prompt"
 	"strings"
 
+	"git"
+
 	color "github.com/logrusorgru/aurora"
 	"github.com/spf13/viper"
 )
@@ -55,10 +57,17 @@ func executeFlow(settings map[string]interface{}) (variables []keyValue) {
 
 		if value, ok := pr["DEFAULT_VALUE"]; ok {
 			defaultValue = value.(string)
+			defaultValue = strings.Replace(defaultValue, "{{BRANCH_NAME}}", git.BranchName(), -1)
 		}
 
 		if options := pr["OPTIONS"]; options == nil {
-			result = prompt.Input(label, errorMessage, defaultValue)
+			var labelMessage = label
+
+			if defaultValue != "" {
+				labelMessage = label + " (" + defaultValue + ")"
+			}
+
+			result = prompt.Input(labelMessage+":", errorMessage, defaultValue)
 		} else {
 			configurationSelectOption := &prompt.SelectConfiguration{
 				ActiveTpl:    "\U0001F449  {{ .Title | cyan | bold }}",

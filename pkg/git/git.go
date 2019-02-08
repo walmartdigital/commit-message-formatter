@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	color "github.com/logrusorgru/aurora"
 )
@@ -56,4 +57,15 @@ func Amend(message string) (err error) {
 	commit(cmdGit, "Amending: ", color.Blue(message))
 
 	return
+}
+
+// BranchName return current branch name
+func BranchName() string {
+	cmdGit := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+	branchName, err := cmdGit.Output()
+	if err != nil {
+		return ""
+	}
+
+	return strings.TrimSuffix(string(branchName), "\n")
 }
