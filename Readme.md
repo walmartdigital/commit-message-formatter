@@ -1,4 +1,4 @@
-# CMF Commit Message Formatter
+# CMF Commit Message Formatter - V2
 
 CMF is a simple to use utility to standarize commit messages on projects.
 
@@ -8,15 +8,15 @@ Install via npm, just do `$ npm install -g go-cmf`
 
 Or from Go `go install github.com/walmartdigital/commit-message-formatter`
 
-Once installed, go to your project an run `$ cmf` after add your files to your stage area.
+Once installed, go to your project an run `$ cmf init` and select one of the flows, it will create a `.cmf.yaml`file on your project with your selected flow.
 
 ## Flows
 
-CMF have two flows (for now) default and jira
+CMF have three flows (for now) default, Jira and custom
 
 ### Default
 
-Running `$ cmf` you get the default flow, you will be prompt for:
+Running `$ cmf init` and select default, you will get the default flow and prompted for:
 
     - Type of change you made to your code
     - Module affected by this change
@@ -24,31 +24,27 @@ Running `$ cmf` you get the default flow, you will be prompt for:
 
 ### Jira
 
-Running `$ cmf jira` you get jira flow, this time you will be prompt for:
+Running `$ cmf init` and select Jira, you will get the jira flow, this time you will be prompt for:
 
     - Jira task ID
     - Type of change you made to your code
     - Commit message or description of your change
 
-> If you want to do jira as a defualt flow just create a `.cmf.yaml`in the root of your project:
+### Custom
 
-```
-DEFAULT: jira
-```
+Running `$ cmf init`and select custom, you will get the custom flow, this time it will create a `.cmf.yaml`file with default flow but with annotations of how change it.
 
 ---
+
+## Variables
+
+CMF have inner variables and you can access it throw templates using `{{}}`:
+
+- {{BRANCH_NAME}} it will print the current branch name of your repository
 
 ## Configurations
 
 It is possible to config CMF as you like, you can change **custom flows, templates or assign default flows**. You can do this using a local file on the root of your porject or setting as global preferences with a file on your Home directory called `.cmf.yaml`.
-
-### DEFAULT
-
-Set a flow as default:
-
-```
-DEFAULT: jira
-```
 
 ### TEMPLATE
 
@@ -70,7 +66,7 @@ TEMPLATE: "{{CHANGE}}({{MODULE}}): {{MESSAGE}}"
 
 Default template `{{JIRA-TASK}} ({{CHANGE}}): {{MESSAGE}}`. You can use this variables:
 
-- JIRA*TASK \_jira task id*
+- JIRA*TASK \_jira task id, by default {{BRANCH_NAME}}*
 - CHANGE _type of change: feature, fix, update_
 - MESSAGE _commit message_
 
