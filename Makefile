@@ -1,6 +1,5 @@
 build:
-	cp package.json package/package.json
-	packr -v -z
+	packr2 build
 
 publish:
 	if [ -d ./dist ]; then rm -Rf ./dist; fi

@@ -1,4 +1,4 @@
-vendor
 src
 dist
 node_modules
+commit-message-formatter
