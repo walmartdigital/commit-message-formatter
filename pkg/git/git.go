@@ -33,10 +33,14 @@ func commit(cmdGit *exec.Cmd, message ...interface{}) {
 	fmt.Println(color.Gray("-------------------------------"))
 	fmt.Println("")
 	cmdGit.Stdout = os.Stdout
-	cmdGit.Run()
+	err := cmdGit.Run()
 	fmt.Println("")
 	fmt.Println(color.Gray("-------------------------------"))
-	fmt.Println(color.Green("Done \U0001F604"))
+	if err == nil {
+		fmt.Println(color.Green("Done \U0001F604"))
+	} else {
+		fmt.Println(color.Red("Something went grong \U0001F92F"))
+	}
 
 	return
 }
