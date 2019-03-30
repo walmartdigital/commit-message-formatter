@@ -33,6 +33,7 @@ func commit(cmdGit *exec.Cmd, message ...interface{}) {
 	fmt.Println(color.Gray("-------------------------------"))
 	fmt.Println("")
 	cmdGit.Stdout = os.Stdout
+	cmdGit.Stderr = os.Stderr
 	err := cmdGit.Run()
 	fmt.Println("")
 	fmt.Println(color.Gray("-------------------------------"))
