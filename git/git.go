@@ -17,6 +17,7 @@ type Git interface {
 	CheckWorkspaceChanges()
 	Commit(message string)
 	Amend(message string)
+	BranchName() string
 }
 
 func commit(cmdGit *exec.Cmd, message ...interface{}) {

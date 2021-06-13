@@ -12,6 +12,7 @@ type Repository interface {
 	CheckWorkspaceChanges()
 	Commit(message string)
 	Amend(message string)
+	BranchName() string
 }
 
 type TemplateManager interface {
@@ -59,7 +60,9 @@ func (cmfInstance *cmf) CommitChanges() {
 		cmfFile, _ = cmfInstance.fs.GetFileFromVirtualFS(defaultYamlFile)
 	}
 
-	extra := map[string]string{}
+	extra := map[string]string{
+		"BRANCH_NAME": cmfInstance.repository.BranchName(),
+	}
 	message, _ := cmfInstance.templateManager.Run(cmfFile, extra)
 	cmfInstance.repository.Commit(message)
 }
