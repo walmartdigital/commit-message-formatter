@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/walmartdigital/commit-message-formatter/cmf"
+	"github.com/walmartdigital/commit-message-formatter/fs"
 	git "github.com/walmartdigital/commit-message-formatter/git"
+	promptxwrapper "github.com/walmartdigital/commit-message-formatter/promptxWrapper"
+	"github.com/walmartdigital/commit-message-formatter/templaterunner"
 )
 
 var cmfInstance cmf.CMF
@@ -18,9 +22,6 @@ var root = &cobra.Command{
 	Long:  "Generate custom commit message for your repo and standarize your commits log",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmfInstance.CommitChanges()
-		// go git.CheckTree()
-		// message := template.Run()
-		// git.Commit(message)
 	},
 }
 
@@ -29,7 +30,6 @@ var version = &cobra.Command{
 	Short: "Version cmf",
 	Long:  "Display version of commit message formatter",
 	Run: func(cmd *cobra.Command, args []string) {
-		// fmt.Println("CMF - Commit Message Formatter v2.0")
 		cmfInstance.GetVersion()
 	},
 }
@@ -40,8 +40,6 @@ var amend = &cobra.Command{
 	Long:  "Amend last commit message",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmfInstance.CommitAmend()
-		// message := template.Run()
-		// git.Amend(message)
 	},
 }
 
@@ -61,8 +59,11 @@ func Execute() {
 	}
 }
 
-func init() {
-	cmfInstance = cmf.NewCMF(git.NewGitWrapper())
+func Build(vfs embed.FS) {
+	fsManager := fs.NewFs(vfs)
+	promptManager := promptxwrapper.NewPromptxWrapper()
+	templateManager := templaterunner.NewTemplateRunner(promptManager)
+	cmfInstance = cmf.NewCMF(git.NewGitWrapper(), templateManager, fsManager)
 	root.AddCommand(version)
 	root.AddCommand(boilerplateCMD)
 	root.AddCommand(amend)
