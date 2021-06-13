@@ -21,9 +21,15 @@
 package main
 
 import (
+	"embed"
+
 	"github.com/walmartdigital/commit-message-formatter/cmd"
 )
 
+//go:embed resources
+var vfs embed.FS
+
 func main() {
+	cmd.Build(vfs)
 	cmd.Execute()
 }
