@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
-	color "github.com/logrusorgru/aurora"
+	color "github.com/logrusorgru/aurora/v3"
 )
 
 type git struct{}
