@@ -69,7 +69,18 @@ func (cmfInstance *cmf) CommitChanges() {
 
 // CommitAmend perform a commit amend over current repository
 func (cmfInstance *cmf) CommitAmend() {
-	fmt.Println("amend!!")
+	cmfInstance.repository.CheckWorkspaceChanges()
+	currentDirectory, _ := cmfInstance.fs.GetCurrentDirectory()
+	cmfFile, err := cmfInstance.fs.GetFileFromFS(currentDirectory + "/" + defaultCMFFile)
+	if err != nil {
+		cmfFile, _ = cmfInstance.fs.GetFileFromVirtualFS(defaultYamlFile)
+	}
+
+	extra := map[string]string{
+		"BRANCH_NAME": cmfInstance.repository.BranchName(),
+	}
+	message, _ := cmfInstance.templateManager.Run(cmfFile, extra)
+	cmfInstance.repository.Amend(message)
 }
 
 // InitializeProject initialize current directory with a inner cmf template
