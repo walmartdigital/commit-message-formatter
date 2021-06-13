@@ -4,15 +4,30 @@ import (
 	"fmt"
 )
 
-var version = "3.0"
+const version = "3.0"
+const defaultYamlFile = "resources/default.yaml"
+const defaultCMFFile = ".cmf.yaml"
 
 type Repository interface {
 	CheckWorkspaceChanges()
 	Commit(message string)
 	Amend(message string)
 }
+
+type TemplateManager interface {
+	Run(yamlData string, injectedVariables map[string]string) (string, error)
+}
+
+type FS interface {
+	GetFileFromVirtualFS(path string) (string, error)
+	GetFileFromFS(path string) (string, error)
+	GetCurrentDirectory() (string, error)
+}
+
 type cmf struct {
-	repository Repository
+	repository      Repository
+	templateManager TemplateManager
+	fs              FS
 }
 
 type CMF interface {
@@ -22,9 +37,11 @@ type CMF interface {
 	InitializeProject()
 }
 
-func NewCMF(repository Repository) CMF {
+func NewCMF(repository Repository, templateManager TemplateManager, fsManager FS) CMF {
 	return &cmf{
-		repository: repository,
+		repository:      repository,
+		templateManager: templateManager,
+		fs:              fsManager,
 	}
 }
 
@@ -36,8 +53,15 @@ func (cmfInstance *cmf) GetVersion() {
 // CommitChanges perform a commit changes over current repository
 func (cmfInstance *cmf) CommitChanges() {
 	cmfInstance.repository.CheckWorkspaceChanges()
-	// message := template.Run()
-	cmfInstance.repository.Commit("message")
+	currentDirectory, _ := cmfInstance.fs.GetCurrentDirectory()
+	cmfFile, err := cmfInstance.fs.GetFileFromFS(currentDirectory + "/" + defaultCMFFile)
+	if err != nil {
+		cmfFile, _ = cmfInstance.fs.GetFileFromVirtualFS(defaultYamlFile)
+	}
+
+	extra := map[string]string{}
+	message, _ := cmfInstance.templateManager.Run(cmfFile, extra)
+	cmfInstance.repository.Commit(message)
 }
 
 // CommitAmend perform a commit amend over current repository
