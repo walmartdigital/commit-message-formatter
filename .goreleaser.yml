@@ -1,12 +1,41 @@
-# Build customization
-project_name: cmf
+# This is an example .goreleaser.yml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
 builds:
-  - binary: cmf
-    goos:
-      - windows
-      - darwin
-      - linux
-    goarch:
-      - amd64
+  - env:
+      - CGO_ENABLED=0
+    binary: git-cmf
     ldflags:
       - -a -installsuffix
+    goos:
+      - linux
+      - windows
+      - darwin
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+brews:
+  - name: git-cmf
+    github:
+      owner: walmartdigital
+      name: https://github.com/walmartdigital/homebrew-git-cmf
+    folder: Formula
+    homepage: https://github.com/walmartdigital/commit-message-formatter
+    description: A simple description of your application.
