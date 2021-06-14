@@ -1,7 +1,14 @@
 package cmf
 
 import (
+	"bufio"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+	"strings"
+
+	color "github.com/logrusorgru/aurora/v3"
 )
 
 const version = "3.0"
@@ -36,6 +43,27 @@ type CMF interface {
 	CommitChanges()
 	CommitAmend()
 	InitializeProject()
+}
+
+func askForConfirmation(s string) bool {
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		fmt.Printf("%s [y/n]: ", s)
+
+		response, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		response = strings.ToLower(strings.TrimSpace(response))
+
+		if response == "y" || response == "yes" {
+			return true
+		} else if response == "n" || response == "no" {
+			return false
+		}
+	}
 }
 
 func NewCMF(repository Repository, templateManager TemplateManager, fsManager FS) CMF {
@@ -85,5 +113,16 @@ func (cmfInstance *cmf) CommitAmend() {
 
 // InitializeProject initialize current directory with a inner cmf template
 func (cmfInstance *cmf) InitializeProject() {
-	fmt.Println("initialize!!")
+	if askForConfirmation("This action will create a new .cmf.yaml file on your working directory. Do you want to continue?") {
+		currentDirectory, _ := cmfInstance.fs.GetCurrentDirectory()
+		cmfFilePath := currentDirectory + "/" + defaultCMFFile
+		cmfFile, _ := cmfInstance.fs.GetFileFromVirtualFS(defaultYamlFile)
+		err := ioutil.WriteFile(cmfFilePath, []byte(cmfFile), 0644)
+		if err != nil {
+			fmt.Println(color.Red("Cannot create .cmf.yaml file"))
+			os.Exit(2)
+		}
+
+		fmt.Println(color.Green("You can customize your flow, just visit: https://github.com/walmartdigital/commit-message-formatter. Enjoy!"))
+	}
 }
