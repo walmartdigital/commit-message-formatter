@@ -74,6 +74,14 @@ func NewCMF(repository Repository, templateManager TemplateManager, fsManager FS
 	}
 }
 
+func (cmfInstance *cmf) getInnerVariables() map[string]string {
+	extra := map[string]string{
+		"BRANCH_NAME": cmfInstance.repository.BranchName(),
+	}
+
+	return extra
+}
+
 // GetVersion return current cmf version
 func (cmfInstance *cmf) GetVersion() {
 	fmt.Println("Git - Commit Message Formatter v", version)
@@ -88,10 +96,7 @@ func (cmfInstance *cmf) CommitChanges() {
 		cmfFile, _ = cmfInstance.fs.GetFileFromVirtualFS(defaultYamlFile)
 	}
 
-	extra := map[string]string{
-		"BRANCH_NAME": cmfInstance.repository.BranchName(),
-	}
-	message, _ := cmfInstance.templateManager.Run(cmfFile, extra)
+	message, _ := cmfInstance.templateManager.Run(cmfFile, cmfInstance.getInnerVariables())
 	cmfInstance.repository.Commit(message)
 }
 
@@ -104,10 +109,7 @@ func (cmfInstance *cmf) CommitAmend() {
 		cmfFile, _ = cmfInstance.fs.GetFileFromVirtualFS(defaultYamlFile)
 	}
 
-	extra := map[string]string{
-		"BRANCH_NAME": cmfInstance.repository.BranchName(),
-	}
-	message, _ := cmfInstance.templateManager.Run(cmfFile, extra)
+	message, _ := cmfInstance.templateManager.Run(cmfFile, cmfInstance.getInnerVariables())
 	cmfInstance.repository.Amend(message)
 }
 

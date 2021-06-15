@@ -2,6 +2,8 @@ package templaterunner
 
 import (
 	"errors"
+	"os"
+	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -24,6 +26,7 @@ type TemplateRunner interface {
 
 // Template main template struct
 type Template struct {
+	Env      []string     `yaml:"ENV"`
 	Prompt   []PromptItem `yaml:"PROMPT"`
 	Template string       `yaml:"TEMPLATE"`
 }
@@ -34,6 +37,7 @@ type PromptItem struct {
 	Label        string    `yaml:"LABEL"`
 	ErrorLabel   string    `yaml:"ERROR_LABEL"`
 	DefaultValue string    `yaml:"DEFAULT_VALUE"`
+	Regex        string    `yaml:"REGEX"`
 	Options      []Options `yaml:"OPTIONS"`
 }
 
@@ -67,16 +71,23 @@ func (tr *templateRunner) parseYaml(yamlData string) (Template, error) {
 }
 
 // Run return the result of run the template
-func (tr *templateRunner) Run(yamlData string, injectedVariables map[string]string) (string, error) {
+func (tr *templateRunner) Run(yamlData string, defaultVariables map[string]string) (string, error) {
 	template, err := tr.parseYaml(yamlData)
 	if err != nil {
 		return "", err
 	}
 
-	variables := tr.prompt(template)
-	for k, v := range injectedVariables {
+	variables := []keyValue{}
+	for k, v := range defaultVariables {
 		variables = append(variables, keyValue{Key: k, Value: v})
 	}
+
+	for _, environmentVariable := range template.Env {
+		variables = append(variables, keyValue{Key: environmentVariable, Value: os.Getenv(environmentVariable)})
+	}
+
+	promptVariables := tr.prompt(template, variables)
+	variables = append(variables, promptVariables...)
 
 	message := tr.parseTemplate(template.Template, variables)
 
@@ -91,10 +102,11 @@ func (tr *templateRunner) parseTemplate(template string, variables []keyValue) s
 	return template
 }
 
-func (tr *templateRunner) prompt(template Template) []keyValue {
+func (tr *templateRunner) prompt(template Template, defaultVariables []keyValue) []keyValue {
 	variables := []keyValue{}
 	for _, step := range template.Prompt {
 		result := ""
+		defaultValue := ""
 		var errorMessage = "empty value"
 
 		if step.ErrorLabel != "" {
@@ -105,12 +117,18 @@ func (tr *templateRunner) prompt(template Template) []keyValue {
 			var labelMessage = step.Label
 
 			if step.DefaultValue != "" {
-				labelMessage += " (" + step.DefaultValue + ")"
+				defaultValue = tr.parseTemplate(step.DefaultValue, defaultVariables)
+				if step.Regex != "" {
+					r, _ := regexp.Compile(step.Regex)
+					defaultValue = r.FindStringSubmatch(defaultValue)[0]
+				}
+
+				labelMessage += " (" + defaultValue + ")"
 			}
 
 			labelMessage += ":"
 
-			result = tr.promptManager.ReadValue(labelMessage, errorMessage, step.DefaultValue)
+			result = tr.promptManager.ReadValue(labelMessage, errorMessage, defaultValue)
 		} else {
 			result = tr.promptManager.ReadValueFromList(step.Label, step.Options)
 		}
