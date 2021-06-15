@@ -33,7 +33,7 @@ changelog:
       - '^test:'
 brews:
   - name: git-cmf
-    github:
+    tap:
       owner: walmartdigital
       name: https://github.com/walmartdigital/homebrew-git-cmf
     folder: Formula
