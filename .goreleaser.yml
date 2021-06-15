@@ -35,7 +35,7 @@ brews:
   - name: git-cmf
     tap:
       owner: walmartdigital
-      name: https://github.com/walmartdigital/homebrew-git-cmf
+      name: homebrew-git-cmf
     folder: Formula
     homepage: https://github.com/walmartdigital/commit-message-formatter
     description: A simple description of your application.
