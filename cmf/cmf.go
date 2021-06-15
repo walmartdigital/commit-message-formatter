@@ -102,7 +102,6 @@ func (cmfInstance *cmf) CommitChanges() {
 
 // CommitAmend perform a commit amend over current repository
 func (cmfInstance *cmf) CommitAmend() {
-	cmfInstance.repository.CheckWorkspaceChanges()
 	currentDirectory, _ := cmfInstance.fs.GetCurrentDirectory()
 	cmfFile, err := cmfInstance.fs.GetFileFromFS(currentDirectory + "/" + defaultCMFFile)
 	if err != nil {
