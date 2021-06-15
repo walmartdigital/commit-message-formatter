@@ -22,7 +22,7 @@ a simple flow to let you customize as you want.
 
 - Using go install: `go install github.com/walmartdigital/commit-message-formatter`
 - Using Brew:
-  - `brew tap /walmartdigital/homebrew-git-cmf`
+  - `brew tap walmartdigital/homebrew-git-cmf`
   - `brew install homebrew-git-cmf`
 - Download binaries from Github
 
