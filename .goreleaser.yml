@@ -36,6 +36,9 @@ brews:
     tap:
       owner: walmartdigital
       name: homebrew-git-cmf
+    description: "CMF is a simple-to-use utility to standarized commit messages on projects."
+    license: "MIT"
+    install: |
+      bin.install "git-cmf"
     folder: Formula
     homepage: https://github.com/walmartdigital/commit-message-formatter
-    description: A simple description of your application.
