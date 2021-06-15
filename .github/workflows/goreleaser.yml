@@ -3,8 +3,8 @@ name: goreleaser
 on:
   pull_request:
   push:
-    # tags:
-    #   - '*'
+    tags:
+      - '*'
 
 jobs:
   goreleaser:
